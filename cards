@@ -1,0 +1,22 @@
+#!/usr/bin/perl
+
+use strict;
+use List::Util qw(sum max);
+use List::MoreUtils 'uniq';
+$\ = "\n";
+
+for my $edges (1..4) {
+	my @candidates = map {
+		[split(//, sprintf('%04d', $_))]
+	} 0 .. 10 ** $edges - 1;
+
+	for my $sum (0 .. 9 * $edges) {
+		my @matches = uniq sort map {
+			join('', sort @{$_})
+		} grep {
+			sum(@{$_}) == $sum
+		} @candidates;
+
+		print sprintf('%02d:%02d:%s', $sum, scalar(@matches), chr(176) x scalar(@matches));
+	}
+}
